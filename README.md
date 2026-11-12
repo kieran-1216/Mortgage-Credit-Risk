@@ -61,9 +61,9 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **Claude Code:** AI coding assistant, used to help write and test the code.
 
 ## Repository
-- **Results:** [results/](results/): tables and explanations for Q1, Q2 and Q3
-- **Live tool:** coming soon
-- **Code:** [code/](code/): the pipeline scripts
+- **Results:** [Results/](Results/): detailed results for the core questions
+- **Live tool:** [Live-Tool/](Live-Tool/): interactive tool that estimates a loan's risk from user inputs
+- **Code:** [Code/](Code/): the pipeline scripts
 
 ## Data Disclaimers
 Built from Freddie Mac's Single-Family Loan-Level Dataset and Fannie Mae's Single-Family Loan Performance Data, used for noncommercial research. This project is not affiliated with or endorsed by Freddie Mac or Fannie Mae. No loan-level data is included in this repository.
