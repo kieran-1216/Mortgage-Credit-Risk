@@ -44,14 +44,10 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **Trade-off curve:** on test loans, how much bad-loan money is caught at each amount of good-loan money turned away.
 
 ## Limitations
-- **Approved loans only.** The data holds loans that were approved and sold to the agencies, so the models never see declined applications.
-- **No cost or profit data.** Q3's cutoff is the point of best separation between bad-loan and good-loan dollars, not a profit-maximizing line. A real lender would set its line from its own costs; the trade-off curve shows the other options.
-- **Methods that try more combinations get a small edge** when cutoffs are chosen on validation loans. Test results are the fair comparison.
-- **Older training loans.** Training loans (2014 to 2020) behaved differently from 2022 and 2023 loans. Percentages are re-adjusted on 2022 loans, but some groups are still predicted less accurately in 2023: refinances, larger loans near the conforming limit, the very safest borrowers, and a few small groups (20-year loans, DTI above 49, 35% mortgage insurance, co-ops).
-- **One model for both agencies.** Freddie Mac loans ran riskier than predicted, and Fannie Mae loans safer. Agency is not a variable because, in the training years, Fannie Mae's missing relief flags make its loans look riskier, the opposite of recent years.
-- **Data gaps.** Fannie Mae's payment-relief flags start in August 2019, and its high-balance flag is missing for many high-cost loans before mid-2019. No location data, so loan size uses the basic conforming limit, not each area's higher limit.
-- **Lowest rate spreads** (well below the market rate) are predicted less reliably.
-- **Overlapping variables.** Some Logistic Regression odds ratios (mortgage insurance with combined LTV; high-balance with loan size) split one effect and shouldn't be read alone.
+- **Approved loans only.** The data holds only loans that were approved and sold to the agencies, so the models never see declined applications.
+- **No cost or profit data.** Q3's cutoff is the point of best separation between bad-loan and good-loan dollars, not a profit-maximizing line. A real lender would set its line from its own costs; the trade-off curve shows the alternatives.
+- **Older training loans.** Loans from 2014 to 2020 behaved differently from 2022 and 2023 loans. Percentages are re-adjusted on 2022 loans, but some groups, mainly refinances and larger loans near the conforming limit, are still predicted less accurately in 2023.
+- **One model for both agencies.** Freddie Mac loans ran riskier than predicted, and Fannie Mae loans safer. Agency is not a variable because gaps in Fannie Mae's training-era data would teach the model the wrong direction.
 - **No race or ethnicity data,** so fair-lending effects can't be measured.
 - **Results review.** Models were refined after a review of first test results (calibration and loan-size handling); the 2023 test set was rescored once.
 
@@ -62,7 +58,6 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **scikit-learn:** isotonic calibration.
 - **SHAP (via LightGBM's built-in contributions):** explaining what drives each prediction.
 - **Streamlit:** the live tool.
-- **Power BI:** results visuals (coming soon).
 - **Claude Code:** AI coding assistant, used to help write and test the code.
 
 ## Repository
