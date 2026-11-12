@@ -65,5 +65,5 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **Live tool:** coming soon
 - **Code:** [code/](code/): the pipeline scripts
 
-## Data Disclosure
+## Data Disclaimers
 Built from Freddie Mac's Single-Family Loan-Level Dataset and Fannie Mae's Single-Family Loan Performance Data, used for noncommercial research. This project is not affiliated with or endorsed by Freddie Mac or Fannie Mae. No loan-level data is included in this repository.
