@@ -52,7 +52,7 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 
 ## Tools
 - **Python:** the full pipeline, from data loading to modeling and checks.
-- **DuckDB (SQL):** loading and building the 25-million-loan dataset from the raw agency files on a laptop.
+- **DuckDB (SQL):** loading and building the 25-million-loan dataset from the raw agency files.
 - **LightGBM and Optuna:** the gradient-boosted model and its settings search.
 - **scikit-learn:** isotonic calibration.
 - **SHAP (via LightGBM's built-in contributions):** explaining what drives each prediction.
