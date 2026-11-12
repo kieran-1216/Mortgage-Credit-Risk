@@ -61,7 +61,7 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **Claude Code:** AI coding assistant, used to help write and test the code.
 
 ## Repository
-- **Results:** [Results/](Results/): detailed results for the core questions
+- **Results:** [Results](Results/Results.md): detailed results for the core questions
 - **Live tool:** [Live-Tool/](Live-Tool/): interactive tool that estimates a loan's risk from user inputs
 - **Code:** [Code/](Code/): the pipeline scripts
 
