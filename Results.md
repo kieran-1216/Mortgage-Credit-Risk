@@ -1,6 +1,6 @@
 # Results
 
-All results are on the test loans: 1,879,687 loans originated in 2023, of which 19,524 (1.04%) became seriously delinquent (90+ days late or worse) within their first 24 payments. Full tables are in the Q1, Q2 and Q3 folders.
+All results are on the test loans: 1,879,687 loans originated in 2023, of which 19,524 (1.04%) became seriously delinquent (90+ days late or worse) within their first 24 payments.
 
 ## Q1: What is each loan's probability of becoming seriously delinquent (90+ days late or worse) within its first 24 payments?
 
