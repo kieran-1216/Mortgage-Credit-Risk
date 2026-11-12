@@ -17,7 +17,7 @@ For conventional conforming, fully amortizing, fixed-rate, single-family (1-4 un
 - **Test (2023Q1 to 2023Q4):** results are measured on these loans, which are never used to learn or choose anything.
 - **Variables (17, all known at application):** credit score, combined LTV, DTI, rate spread (the loan's rate minus the median rate for similar loans that month), mortgage insurance %, loan amount as a % of that year's conforming loan limit, loan term, loan purpose, number of borrowers, occupancy, first-time homebuyer, channel, property type, number of units, special program, high-balance flag, and an at-the-limit flag.
 
-## How each question is answered
+## Answering core questions
 
 ### Q1: Each loan's risk
 Two models: **Logistic Regression**, the classic explainable scorecard model, and **LightGBM**, a gradient-boosted tree model that can capture curves and interactions. Comparing a simple, transparent model with a more flexible one shows how much the extra complexity actually buys.
@@ -48,7 +48,6 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **No cost or profit data.** Q3's cutoff is the point of best separation between bad-loan and good-loan dollars, not a profit-maximizing line. A real lender would set its line from its own costs; the trade-off curve shows the alternatives.
 - **Older training loans.** Loans from 2014 to 2020 behaved differently from 2022 and 2023 loans. Percentages are re-adjusted on 2022 loans, but some groups, mainly refinances and larger loans near the conforming limit, are still predicted less accurately in 2023.
 - **One model for both agencies.** Freddie Mac loans ran riskier than predicted, and Fannie Mae loans safer. Agency is not a variable because gaps in Fannie Mae's training-era data would teach the model the wrong direction.
-- **No race or ethnicity data,** so fair-lending effects can't be measured.
 - **Results review.** Models were refined after a review of first test results (calibration and loan-size handling); the 2023 test set was rescored once.
 
 ## Tools used
