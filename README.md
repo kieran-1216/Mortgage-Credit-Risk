@@ -58,6 +58,7 @@ Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
 - **scikit-learn:** isotonic calibration.
 - **SHAP (via LightGBM's built-in contributions):** explaining what drives each prediction.
 - **Streamlit:** the live tool.
+- **Power BI:** results dashboard.
 - **Claude Code:** AI coding assistant, used to help write and test the code.
 
 ## Repository
