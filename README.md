@@ -1,47 +1,76 @@
 # Mortgage Credit Risk
 
 ## Business Problem
-A lender has to decide which mortgage applications to approve. Approving more grows volume. Approving riskier loans raises delinquencies. Using only what is known at application, it needs to know where the risk sits and where to draw the line.
+Mortgage lenders balance growth against risk. Approving more loans increases volume, but approving riskier loans increases delinquencies. Lenders must estimate each loan's risk and decide where to set their approval cutoff.
 
 ## Core Questions
 For conventional conforming, fully amortizing, fixed-rate, single-family (1-4 unit) mortgages purchased by Freddie Mac and Fannie Mae, using only information known at application:
 
 1. **What is each loan's probability of becoming seriously delinquent (90+ days late or worse) within its first 24 payments?**
 2. **Which variables drive that risk?**
-3. **Where should a lender set approval cutoffs to remove the most delinquent-loan dollars while declining the fewest good-loan dollars?**
+3. **Where should a lender set approval cutoffs to decline the most delinquent loans while turning away the fewest performing loans, measured by loan balance?**
 
 ## Data and Setup
-- **Data:** about 25 million loans from Freddie Mac's and Fannie Mae's public single-family loan-level data, originated 2014Q1 to 2023Q4. Loans originated 2020Q2 to 2022Q1 (the pandemic period, when payment relief programs were widespread) are excluded.
+- **Data:** ~25 million loans from Freddie Mac's and Fannie Mae's public single-family loan-level data, originated 2014Q1 to 2023Q4. Loans originated 2020Q2 to 2022Q1 (the pandemic period, when payment relief programs were widespread) are excluded.
 - **Training (2014Q1 to 2020Q1):** models learn from these loans.
 - **Validation (2022Q2 to 2022Q4):** settings, percentage adjustments and cutoffs are chosen on these loans.
-- **Test (2023Q1 to 2023Q4):** results are measured on these loans, which are never used to learn or choose anything.
-- **Variables (17, all known at application):** credit score, combined LTV, DTI, rate spread (the loan's rate minus the median rate for similar loans that month), mortgage insurance %, loan amount as a % of that year's conforming loan limit, loan term, loan purpose, number of borrowers, occupancy, first-time homebuyer, channel, property type, number of units, special program, high-balance flag, and an at-the-limit flag.
+- **Test (2023Q1 to 2023Q4):** results are measured on these loans.
+- **Variables (17, all known at application):**
+  - **Credit score:** the lowest credit score among the loan's borrowers
+  - **Combined LTV:** all loans on the property at closing as a % of its value
+  - **DTI:** monthly debt payments, including the new mortgage, as a % of monthly income
+  - **Rate spread:** the loan's interest rate minus the median rate for same-term loans that month
+  - **Mortgage insurance %:** the share of the loan covered by mortgage insurance (0 if none)
+  - **Loan amount % of limit:** the loan amount as a % of that year's conforming loan limit for its number of units
+  - **Loan term:** the loan's length in months
+  - **Loan purpose:** purchase, cash-out refinance, or no-cash-out refinance
+  - **Number of borrowers:** one, or two or more
+  - **Occupancy:** primary home, second home, or investment property
+  - **First-time homebuyer:** whether the borrower is buying their first home
+  - **Channel:** how the loan was originated (retail, broker, or correspondent lender)
+  - **Property type:** single-family, planned development, condo, co-op, or manufactured home
+  - **Number of units:** 1 to 4
+  - **Special program:** whether the loan is in an affordable-lending, housing finance agency, or refinance program
+  - **High-balance flag:** whether the loan is above the standard limit, allowed only in high-cost areas
+  - **At-the-limit flag:** whether the loan amount equals the conforming limit exactly
 
 ## Answering Core Questions
 
-### Q1: Each loan's risk
-Two models: **Logistic Regression**, the classic explainable scorecard model, and **LightGBM**, a gradient-boosted tree model that can capture curves and interactions. Comparing a simple, transparent model with a more flexible one shows how much the extra complexity actually buys.
+### Q1: How likely is each loan to become seriously delinquent?
+Two models are built: Logistic Regression and LightGBM.
 
-- **Logistic Regression** learns from training loans. It has no settings to tune.
-- **LightGBM:** Optuna's tuner tries different setups. Each setup learns from training loans, and the setup whose predictions best match what actually happened on validation loans (by log loss) is kept.
-- **Adjusting the percentages:** training loans went bad less often than recent loans, so each model's percentages are adjusted to match validation loans with isotonic calibration (checked on validation loans left out of the fit).
-- **Measured on test loans,** all loans and then each agency alone:
+**Logistic Regression**
+- **Train (2014Q1 to 2020Q1):** learns from training loans, using only variables known at application. It has no settings to tune.
+- **Validate (2022Q2 to 2022Q4):** predicts the validation loans, and its percentages are adjusted to match them (isotonic calibration).
+- **Test (2023Q1 to 2023Q4):** predicts the test loans with that adjustment and is measured on all test loans, then on each agency's alone:
   - **Order (AUC):** do the riskiest-rated loans actually go bad most?
-  - **Level (calibration):** do the percentages match actual bad rates across ten equal-sized risk groups?
+  - **Level (calibration):** do its percentages match actual bad rates across ten equal-sized risk groups?
 
-### Q2: What drives the risk
-Uses the Q1 models; nothing new is learned or chosen. SHAP values on test loans:
-- **Importance:** how much each variable affects predicted risk, ranked, both models side by side.
-- **Shape:** how each variable's effect changes across its values.
-- **Compounding:** which variables are riskier together than apart (LightGBM).
+**LightGBM**
+- **Train (2014Q1 to 2020Q1):** Optuna tries different setups within ranges fixed before modeling. Each setup learns from training loans, using only variables known at application.
+- **Validate (2022Q2 to 2022Q4):** each setup predicts the validation loans, and its percentages are adjusted to match them (isotonic calibration). The setup whose adjusted percentages come closest to what actually happened is kept, along with its adjustment.
+- **Test (2023Q1 to 2023Q4):** predicts the test loans with that adjustment and is measured on all test loans, then on each agency's alone:
+  - **Order (AUC):** do the riskiest-rated loans actually go bad most?
+  - **Level (calibration):** do its percentages match actual bad rates across ten equal-sized risk groups?
+
+### Q2: Which variables drive that risk?
+Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans (2023Q1 to 2023Q4), on the log-odds scale:
+- **Importance:** how much each variable affects predicted risk, ranked. Both models side by side.
+- **Shape:** how each variable's effect changes across its values. Both models: smooth for Logistic Regression by design; LightGBM can also show direction changes and sharp jumps.
+- **Compounding:** which variables are riskier together than apart. LightGBM only.
 - **Odds ratios:** Logistic Regression's weights, the standard scorecard view.
 
-### Q3: Where to set the approval cutoff
-- **Methods compared:** no cutoff (baseline), Logistic Regression risk, LightGBM risk, each variable alone, every pair of variables, and every trio of variables (in every and/or combination).
+### Q3: Which cutoff best separates delinquent from performing loans?
+- **Methods:** no cutoff (baseline); Logistic Regression risk; LightGBM risk; each variable alone; every pair of variables; every trio of variables (pairs and trios in every and/or combination).
+- **Riskier end:** for the variable, pair and trio rules, each variable's riskier end is learned from training loans. For numbers, it's the end where loans went bad more often (for example, higher DTI). For categories, they're ordered from most often bad to least.
+- **Missing values:** loans missing a value are kept together and placed in that order by how often they went bad in training.
 - **Score:** % of bad-loan dollars declined minus % of good-loan dollars declined, using each loan's original amount.
-- **Process:** cutoffs come from training values, every cutoff is scored on validation loans, and each method's best cutoff is applied once, unchanged, to test loans.
-- **Winner:** the method with the highest validation score.
-- **Trade-off curve:** on test loans, how much bad-loan money is caught at each amount of good-loan money turned away.
+- **Process (for each method):**
+  - **Cutoffs:** set from training values. For a single variable or a model's risk, every distinct value (for a category, each boundary in riskiest-first order). For pairs and trios, each variable at 1% steps, in every combination.
+  - **Scoring the cutoffs:** every cutoff is scored on validation loans, and the highest score is kept; ties go to the cutoff declining fewer loan dollars.
+  - **Testing the cutoff:** only the chosen cutoff is applied to test loans, as a fixed rule (for example, decline if risk is above 4%). Results include the score and the bad and good loans declined and approved, in counts and dollars, on all test loans and then on each agency's alone. No winner is picked here; test results are just reported.
+- **Trade-off curve:** on test loans, how much bad-loan money is caught at each amount of good-loan money turned away; a line for each model and single-variable method, plus a dot at each method's chosen cutoff, all on one chart.
+- **Winning method:** the method with the highest validation score; ties go to the method declining fewer loan dollars, and if still tied, the method using fewer variables wins.
 
 ## Limitations
 - **Approved loans only.** The data holds only loans that were approved and sold to the agencies, so the models never see declined applications.
