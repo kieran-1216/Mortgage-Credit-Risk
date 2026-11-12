@@ -90,7 +90,7 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 - **Results review.** Models were refined after a review of first test results (calibration and loan-size handling); the 2023 test set was rescored once.
 
 ## Repository
-- **[Results](Results.md):** detailed results for the core questions
+- **[Results](Results.md):** detailed results of the core questions
 - **[Live Tool](Live-Tool/):** interactive tool that estimates a loan's risk from user inputs
 - **[Code](Code/):** the pipeline scripts
 
