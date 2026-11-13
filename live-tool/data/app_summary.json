@@ -1,0 +1,110 @@
+{
+ "script": "build_app_summary.py v3",
+ "written_at": "2026-11-13T13:13:52",
+ "mode": "full",
+ "note": "aggregates only: shares and risks, no counts and no loan rows",
+ "category_values": {
+  "loan purpose": [
+   "purchase",
+   "cash-out refinance",
+   "no-cash-out refinance"
+  ],
+  "number of borrowers": [
+   "1",
+   "2 or more"
+  ],
+  "occupancy": [
+   "primary",
+   "second home",
+   "investor"
+  ],
+  "first-time homebuyer": [
+   "Y",
+   "N"
+  ],
+  "channel": [
+   "retail",
+   "broker",
+   "correspondent"
+  ],
+  "property type": [
+   "SF",
+   "PU",
+   "CO",
+   "CP",
+   "MH"
+  ],
+  "number of units": [
+   "1",
+   "2",
+   "3",
+   "4"
+  ],
+  "special program": [
+   "none",
+   "F",
+   "H"
+  ],
+  "high-balance flag": [
+   "Y",
+   "N"
+  ],
+  "at-the-limit flag": [
+   "Y",
+   "N"
+  ]
+ },
+ "lr_column_shares": {
+  "incomplete application": 0.0004201926293532377,
+  "loan purpose = cash-out refinance": 0.22332952857802182,
+  "loan purpose = no-cash-out refinance": 0.24286972254301112,
+  "number of borrowers = 2 or more": 0.481777628866406,
+  "occupancy = second home": 0.0410412234464443,
+  "occupancy = investor": 0.07592444162159727,
+  "first-time homebuyer = Y": 0.21183345017770666,
+  "channel = broker": 0.10537864164765359,
+  "channel = correspondent": 0.32488224831691065,
+  "property type = PU": 0.277630031757982,
+  "property type = CO": 0.09057286848441598,
+  "property type = CP": 0.002817488137549206,
+  "property type = MH": 0.0061716565373796635,
+  "number of units = 2": 0.014127252916721426,
+  "number of units = 3": 0.0032240295008141052,
+  "number of units = 4": 0.0029008226956912563,
+  "special program = F": 0.012139495391175602,
+  "special program = H": 0.04607411705204381,
+  "high-balance flag = Y": 0.03063653285239019,
+  "at-the-limit flag = Y": 0.022469175369824453
+ },
+ "rarely_blank_in_training": {
+  "credit score": true,
+  "combined LTV": true,
+  "DTI": true,
+  "rate spread": true,
+  "mortgage insurance %": true,
+  "loan amount % of limit": true,
+  "loan term": true,
+  "loan purpose": true,
+  "number of borrowers": true,
+  "occupancy": true,
+  "first-time homebuyer": true,
+  "channel": true,
+  "property type": true,
+  "number of units": true,
+  "special program": true,
+  "high-balance flag": true,
+  "at-the-limit flag": true
+ },
+ "rare_blank_rule": "blank in fewer than 1 in 1,000 training loans",
+ "median_rate_2023": {
+  "10-year": 5.99,
+  "15-year": 5.9325,
+  "20-year": 6.375,
+  "30-year": 6.5
+ },
+ "median_rule": "median of the monthly medians, first payment months 2023-01 to 2023-12, months with 30 or more loans",
+ "mean_adjusted_risk_2023": {
+  "Logistic Regression": 0.01025167378180195,
+  "LightGBM": 0.010319428853865857
+ }
+}

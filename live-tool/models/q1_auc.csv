@@ -1,0 +1,7 @@
+population,model,loans,bad_loans,actual_bad_rate,auc,tied_at_boundary
+all test loans,Logistic Regression,"1,879,687","19,524",1.0387%,0.812638,0
+all test loans,LightGBM,"1,879,687","19,524",1.0387%,0.821006,0
+Freddie Mac,Logistic Regression,"927,117","11,362",1.2255%,0.814621,0
+Freddie Mac,LightGBM,"927,117","11,362",1.2255%,0.821127,0
+Fannie Mae,Logistic Regression,"952,570","8,162",0.8568%,0.805268,0
+Fannie Mae,LightGBM,"952,570","8,162",0.8568%,0.816704,0

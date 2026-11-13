@@ -1,0 +1,140 @@
+{
+ "chosen_setup": 41,
+ "step": "regularization_factors",
+ "params": {
+  "objective": "binary",
+  "metric": [
+   "binary_logloss",
+   "custom"
+  ],
+  "verbosity": -1,
+  "seed": 1,
+  "deterministic": true,
+  "num_threads": 8,
+  "feature_pre_filter": false,
+  "lambda_l1": 5.067077392589753,
+  "lambda_l2": 3.3505483151836386e-08,
+  "num_leaves": 5,
+  "feature_fraction": 0.4,
+  "bagging_fraction": 1.0,
+  "bagging_freq": 0,
+  "min_child_samples": 20
+ },
+ "trees": 999,
+ "rounds_trained": 1000,
+ "hit_cap": true,
+ "seed": 1,
+ "optuna_seed": 1,
+ "threads": 8,
+ "deterministic": true,
+ "num_boost_round": 1000,
+ "early_stopping_rounds": 100,
+ "feature_order": [
+  "credit_score",
+  "cltv",
+  "dti",
+  "rate_spread",
+  "mi_pct",
+  "pct_of_limit",
+  "loan_term",
+  "loan_purpose",
+  "num_borrowers",
+  "occupancy",
+  "first_time_homebuyer",
+  "channel",
+  "property_type",
+  "num_units",
+  "special_program",
+  "high_balance",
+  "at_limit"
+ ],
+ "categorical_features": [
+  "loan_purpose",
+  "num_borrowers",
+  "occupancy",
+  "first_time_homebuyer",
+  "channel",
+  "property_type",
+  "num_units",
+  "special_program",
+  "high_balance",
+  "at_limit"
+ ],
+ "category_codes": {
+  "loan purpose": {
+   "purchase": 0,
+   "cash-out refinance": 1,
+   "no-cash-out refinance": 2
+  },
+  "number of borrowers": {
+   "1": 0,
+   "2 or more": 1
+  },
+  "occupancy": {
+   "primary": 0,
+   "second home": 1,
+   "investor": 2
+  },
+  "first-time homebuyer": {
+   "Y": 0,
+   "N": 1
+  },
+  "channel": {
+   "retail": 0,
+   "broker": 1,
+   "correspondent": 2
+  },
+  "property type": {
+   "SF": 0,
+   "PU": 1,
+   "CO": 2,
+   "CP": 3,
+   "MH": 4
+  },
+  "number of units": {
+   "1": 0,
+   "2": 1,
+   "3": 2,
+   "4": 3
+  },
+  "special program": {
+   "none": 0,
+   "F": 1,
+   "H": 2,
+   "R": 3
+  },
+  "high-balance flag": {
+   "Y": 0,
+   "N": 1
+  },
+  "at-the-limit flag": {
+   "Y": 0,
+   "N": 1
+  }
+ },
+ "reference_categories": {
+  "loan purpose": "purchase",
+  "number of borrowers": "1",
+  "occupancy": "primary",
+  "first-time homebuyer": "N",
+  "channel": "retail",
+  "property type": "SF",
+  "number of units": "1",
+  "special program": "none",
+  "high-balance flag": "N",
+  "at-the-limit flag": "N"
+ },
+ "unseen_category_rule": "a value absent from training gets the reference category's code; a blank category is missing (NaN)",
+ "setup_comparison": "5-fold cross-fitted isotonic validation log loss at the early-stopped tree count",
+ "validation": {
+  "logloss_before": 0.05782219452459775,
+  "logloss_after": 0.055477616846847266,
+  "logloss_cross_fitted": 0.05553514463327909,
+  "auc": 0.8038290966414844,
+  "steps": 93,
+  "min_bad_in_a_step": 11,
+  "min_good_in_a_step": 184,
+  "lowest_value": 0.00025512570739400685,
+  "highest_value": 0.13319672131147542
+ }
+}

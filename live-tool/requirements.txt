@@ -1,0 +1,7 @@
+# Tested with Python 3.13.3
+streamlit==1.63.0
+lightgbm==4.7.0
+numpy==2.2.6
+pandas==2.3.3
+altair==6.2.2
+duckdb==2.0.0

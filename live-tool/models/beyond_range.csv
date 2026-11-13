@@ -1,0 +1,8 @@
+variable,training_min,training_max,validation_below,validation_above,test_below,test_above
+credit score,309,850,1-10,0,1-10,0
+combined LTV,1,105,0,0,0,0
+DTI,1,63,0,16,0,0
+rate spread,-1.875,2.875,12362,1-10,14715,0
+mortgage insurance %,0,55,0,0,0,0
+loan amount % of limit,0.21,172.9,0,0,0,0
+loan term,36,360,0,0,0,0

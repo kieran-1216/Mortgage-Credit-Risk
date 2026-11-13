@@ -1,0 +1,259 @@
+{
+ "columns": [
+  "intercept",
+  "credit score",
+  "combined LTV",
+  "DTI",
+  "rate spread",
+  "mortgage insurance %",
+  "loan amount % of limit",
+  "loan term",
+  "incomplete application",
+  "loan purpose = cash-out refinance",
+  "loan purpose = no-cash-out refinance",
+  "number of borrowers = 2 or more",
+  "occupancy = second home",
+  "occupancy = investor",
+  "first-time homebuyer = Y",
+  "channel = broker",
+  "channel = correspondent",
+  "property type = PU",
+  "property type = CO",
+  "property type = CP",
+  "property type = MH",
+  "number of units = 2",
+  "number of units = 3",
+  "number of units = 4",
+  "special program = F",
+  "special program = H",
+  "high-balance flag = Y",
+  "at-the-limit flag = Y"
+ ],
+ "coefficients_original_units": {
+  "intercept": 5.551656249550982,
+  "credit score": -0.018264147471559074,
+  "combined LTV": 0.009683573737987585,
+  "DTI": 0.027723211059765388,
+  "rate spread": 0.4752606443897353,
+  "mortgage insurance %": 0.014327340948078799,
+  "loan amount % of limit": -0.002340294240032351,
+  "loan term": 0.002189457680621738,
+  "incomplete application": 0.9288487893226391,
+  "loan purpose = cash-out refinance": 0.22501793390515604,
+  "loan purpose = no-cash-out refinance": -0.0013001378063576723,
+  "number of borrowers = 2 or more": -0.924972365886943,
+  "occupancy = second home": -0.12999369959041304,
+  "occupancy = investor": -0.32319671472054273,
+  "first-time homebuyer = Y": 0.09492687117375442,
+  "channel = broker": 0.13366356156721826,
+  "channel = correspondent": 0.03145349207395871,
+  "property type = PU": 0.027287241647420284,
+  "property type = CO": -0.17263836849822625,
+  "property type = CP": -0.5042045963804364,
+  "property type = MH": 0.19261541350692507,
+  "number of units = 2": -0.07292542843140408,
+  "number of units = 3": -0.03611612349654461,
+  "number of units = 4": 0.12423395365603591,
+  "special program = F": 0.28407246735261243,
+  "special program = H": 0.027927304445591224,
+  "high-balance flag = Y": 0.18183431403026057,
+  "at-the-limit flag = Y": 0.35972444355343486
+ },
+ "coefficients_standardized": {
+  "intercept": -5.704626374471831,
+  "credit score": -0.8389215120872909,
+  "combined LTV": 0.16400905254254097,
+  "DTI": 0.25874556461754794,
+  "rate spread": 0.17244095890531774,
+  "mortgage insurance %": 0.17135864639869633,
+  "loan amount % of limit": -0.06436366430121047,
+  "loan term": 0.1552192672694633,
+  "incomplete application": 0.9288487893226391,
+  "loan purpose = cash-out refinance": 0.22501793390515604,
+  "loan purpose = no-cash-out refinance": -0.0013001378063576723,
+  "number of borrowers = 2 or more": -0.924972365886943,
+  "occupancy = second home": -0.12999369959041304,
+  "occupancy = investor": -0.32319671472054273,
+  "first-time homebuyer = Y": 0.09492687117375442,
+  "channel = broker": 0.13366356156721826,
+  "channel = correspondent": 0.03145349207395871,
+  "property type = PU": 0.027287241647420284,
+  "property type = CO": -0.17263836849822625,
+  "property type = CP": -0.5042045963804364,
+  "property type = MH": 0.19261541350692507,
+  "number of units = 2": -0.07292542843140408,
+  "number of units = 3": -0.03611612349654461,
+  "number of units = 4": 0.12423395365603591,
+  "special program = F": 0.28407246735261243,
+  "special program = H": 0.027927304445591224,
+  "high-balance flag = Y": 0.18183431403026057,
+  "at-the-limit flag = Y": 0.35972444355343486
+ },
+ "columns_constant_in_training": [],
+ "standardization": {
+  "credit score": {
+   "mean": 748.1059634105162,
+   "sd": 45.93269482704623
+  },
+  "combined LTV": {
+   "mean": 75.17416727633602,
+   "sd": 16.936831068797634
+  },
+  "DTI": {
+   "mean": 34.58931921136018,
+   "sd": 9.333174431336513
+  },
+  "rate spread": {
+   "mean": 0.06549727896811255,
+   "sd": 0.3628345013224119
+  },
+  "mortgage insurance %": {
+   "mean": 7.367284460183514,
+   "sd": 11.96025466411996
+  },
+  "loan amount % of limit": {
+   "mean": 53.68344922185539,
+   "sd": 27.50238119644338
+  },
+  "loan term": {
+   "mean": 323.964525591629,
+   "sd": 70.89393352667399
+  }
+ },
+ "fill_values": {
+  "credit score": 756.0,
+  "combined LTV": 80.0,
+  "DTI": 36.0,
+  "rate spread": 0.0,
+  "mortgage insurance %": 0.0,
+  "loan amount % of limit": 48.81,
+  "loan term": 360.0,
+  "loan purpose": "purchase",
+  "number of borrowers": "1",
+  "occupancy": "primary",
+  "first-time homebuyer": "N",
+  "channel": "retail",
+  "property type": "SF",
+  "number of units": "1",
+  "special program": "none",
+  "high-balance flag": "N",
+  "at-the-limit flag": "N"
+ },
+ "reference_categories": {
+  "loan purpose": "purchase",
+  "number of borrowers": "1",
+  "occupancy": "primary",
+  "first-time homebuyer": "N",
+  "channel": "retail",
+  "property type": "SF",
+  "number of units": "1",
+  "special program": "none",
+  "high-balance flag": "N",
+  "at-the-limit flag": "N"
+ },
+ "dummy_columns": [
+  {
+   "variable": "loan purpose",
+   "value": "cash-out refinance"
+  },
+  {
+   "variable": "loan purpose",
+   "value": "no-cash-out refinance"
+  },
+  {
+   "variable": "number of borrowers",
+   "value": "2 or more"
+  },
+  {
+   "variable": "occupancy",
+   "value": "second home"
+  },
+  {
+   "variable": "occupancy",
+   "value": "investor"
+  },
+  {
+   "variable": "first-time homebuyer",
+   "value": "Y"
+  },
+  {
+   "variable": "channel",
+   "value": "broker"
+  },
+  {
+   "variable": "channel",
+   "value": "correspondent"
+  },
+  {
+   "variable": "property type",
+   "value": "PU"
+  },
+  {
+   "variable": "property type",
+   "value": "CO"
+  },
+  {
+   "variable": "property type",
+   "value": "CP"
+  },
+  {
+   "variable": "property type",
+   "value": "MH"
+  },
+  {
+   "variable": "number of units",
+   "value": "2"
+  },
+  {
+   "variable": "number of units",
+   "value": "3"
+  },
+  {
+   "variable": "number of units",
+   "value": "4"
+  },
+  {
+   "variable": "special program",
+   "value": "F"
+  },
+  {
+   "variable": "special program",
+   "value": "H"
+  },
+  {
+   "variable": "high-balance flag",
+   "value": "Y"
+  },
+  {
+   "variable": "at-the-limit flag",
+   "value": "Y"
+  }
+ ],
+ "incomplete_application": {
+  "rule": "1 if any of the 17 model variables is blank",
+  "training_loans": 8834,
+  "validation_loans": 1187
+ },
+ "fit": {
+  "iterations": 8,
+  "converged": true,
+  "halvings": 0,
+  "max_abs_gradient": 1.6362022847715707e-11,
+  "max_rel_step": 1.434228666673529e-15,
+  "log_likelihood": -576492.4467543458,
+  "dropped_names": [],
+  "separated": []
+ },
+ "validation": {
+  "logloss_before": 0.05852616974826551,
+  "logloss_after": 0.05587548688249133,
+  "logloss_cross_fitted": 0.05592597522584421,
+  "auc": 0.7969565703331667,
+  "steps": 80,
+  "min_bad_in_a_step": 12,
+  "min_good_in_a_step": 190,
+  "lowest_value": 0.0002802036146266287,
+  "highest_value": 0.10377358490566038
+ },
+ "unseen_category_rule": "a value absent from training has no column and scores as the reference"
+}
