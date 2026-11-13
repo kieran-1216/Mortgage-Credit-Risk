@@ -78,6 +78,7 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 - **LightGBM and Optuna:** the gradient-boosted model and its settings search.
 - **scikit-learn:** isotonic calibration.
 - **SHAP (via LightGBM's built-in contributions):** explaining what drives each prediction.
+- **Streamlit:** the live risk calculator.
 - **Claude Code:** AI coding assistant, used to help write and test the code.
 
 ## Limitations
@@ -89,6 +90,7 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 
 ## Repository
 - **[Results](results.md):** detailed results of the core questions
+- **[Live Tool](APP-LINK):** interactive tool that estimates a loan's risk from user inputs ([source](live-tool/))
 - **[Code](code/):** the pipeline scripts
 
 ## Data Disclaimers
