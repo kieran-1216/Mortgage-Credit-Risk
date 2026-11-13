@@ -66,7 +66,7 @@ Loans are sorted by predicted risk into ten equal groups. Each group's predicted
 
 By agency, Fannie Mae loans became delinquent less often than predicted in every group, and Freddie Mac loans more often in the riskier half.
 
-Each loan gets its own probability from the models, using only information known at application. With LightGBM, the stronger model, probabilities average 0.04% in the safest tenth of loans and 4.39% in the riskiest, and 1.03% overall. They rank loans well (AUC 0.82) and match what actually happened (1.04% overall). The main miss is by agency: Freddie Mac loans became delinquent about 10% more often than predicted, and Fannie Mae loans about 10% less often. This likely reflects differences between the agencies, such as their lender mix, that the model's variables don't capture.
+Each loan gets its own probability, and both models estimate it well. With LightGBM, the stronger model, probabilities average 0.04% in the safest tenth of loans and 4.39% in the riskiest. It ranks loans well (AUC 0.82) and matches actual rates overall (1.03% predicted vs 1.04% actual). Accuracy is weakest by agency. Freddie Mac loans became delinquent about 10% more often than predicted, and Fannie Mae loans about 10% less often. This likely reflects differences between the agencies, such as their lender mix, that the model's variables don't capture.
 
 ## Q2: Which variables drive that risk?
 
