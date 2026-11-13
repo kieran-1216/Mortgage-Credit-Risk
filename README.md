@@ -90,9 +90,9 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 - **Results review.** Models were refined after a review of first test results (calibration and loan-size handling); the 2023 test set was rescored once.
 
 ## Repository
-- **[Results](Results.md):** detailed results of the core questions
-- **[Live Tool](Live-Tool/):** interactive tool that estimates a loan's risk from user inputs
-- **[Code](Code/):** the pipeline scripts
+- **[Results](results.md):** detailed results of the core questions
+- **[Live Tool](live-tool/):** interactive tool that estimates a loan's risk from user inputs
+- **[Code](code/):** the pipeline scripts
 
 ## Data Disclaimers
 Built from Freddie Mac's Single-Family Loan-Level Dataset and Fannie Mae's Single-Family Loan Performance Data, used for noncommercial research. This project is not affiliated with or endorsed by Freddie Mac or Fannie Mae. No loan-level data is included in this repository.
