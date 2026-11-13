@@ -90,7 +90,7 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 
 ## Repository
 - **[Results](results.md):** detailed results of the core questions
-- **[Live Tool](APP-LINK):** interactive tool that estimates a loan's risk from user inputs ([source](live-tool/))
+- **[Live Tool](https://mortgage-delinquency-risk-calculator.streamlit.app/):** interactive tool that estimates a loan's risk from user inputs ([source](live-tool/))
 - **[Code](code/):** the pipeline scripts
 
 ## Data Disclaimers
