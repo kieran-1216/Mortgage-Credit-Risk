@@ -1,10 +1,10 @@
 # Results
 
-All results are on the test loans: 1,879,687 loans originated in 2023, of which 19,524 (1.04%) became seriously delinquent (90+ days late or worse) within their first 24 payments.
+All results are on the test loans: 1,879,687 loans originated in 2023, of which 19,524 (1.04%) became seriously delinquent (90+ days late or worse) within their first 24 payments. These are called bad loans below; all others are good loans.
 
 ## Q1: What is each loan's probability of becoming seriously delinquent (90+ days late or worse) within its first 24 payments?
 
-### AUC (how well loans are ranked by risk)
+### AUC (model ability to rank loans by risk)
 
 | Loans | Logistic Regression | LightGBM |
 |---|---|---|
@@ -12,9 +12,9 @@ All results are on the test loans: 1,879,687 loans originated in 2023, of which 
 | Freddie Mac | 0.815 | 0.821 |
 | Fannie Mae | 0.805 | 0.817 |
 
-AUC is the chance the model rates a loan that went bad as riskier than one that didn't (0.5 = coin flip, 1.0 = perfect). Both models score above 0.80 everywhere, with LightGBM slightly ahead.
+AUC measures how well a model ranks loans by risk, from 0.5 (a coin flip) to 1.0 (perfect). Both models score above 0.80 overall and for each agency, with LightGBM scoring slightly higher.
 
-### Calibration (predicted vs actual bad rates)
+### Calibration (predicted vs actual bad rates by risk group)
 
 | Risk Group (1 = Lowest) | Logistic Regression: Predicted | Logistic Regression: Actual | LightGBM: Predicted | LightGBM: Actual |
 |---|---|---|---|---|
@@ -29,10 +29,12 @@ AUC is the chance the model rates a loan that went bad as riskier than one that 
 | 9 | 2.18% | 2.24% | 2.18% | 2.23% |
 | 10 | 4.20% | 4.49% | 4.39% | 4.64% |
 | All Loans | 1.03% | 1.04% | 1.03% | 1.04% |
+| Freddie Mac | 1.11% | 1.23% | 1.11% | 1.23% |
+| Fannie Mae | 0.94% | 0.86% | 0.96% | 0.86% |
 
-Loans are sorted by predicted risk into ten equal groups, and each group's predicted rate should match its actual rate. They track closely, 1.03% vs 1.04% overall. LightGBM's top group went bad about 145 times as often as its bottom group.
+Loans are sorted by predicted risk into ten equal groups. Each group's predicted rate should match its actual rate, and they track closely in every group.
 
-Each loan's probability can be estimated well from application information alone. LightGBM is the stronger model: it ranks loans better, and its percentages closely match what happened. The misses are small: Freddie Mac loans went bad about 10% more often than predicted, and Fannie Mae loans about 10% less often.
+Each loan gets its own probability from the models, using only information known at application. With LightGBM, the stronger model, probabilities average 0.04% in the safest tenth of loans and 4.39% in the riskiest, and 1.03% overall. They rank loans well (AUC 0.82) and match what actually happened (1.04% overall). The main miss is by agency: Freddie Mac loans went bad about 10% more often than predicted, and Fannie Mae loans about 10% less often. This likely reflects differences between the agencies, such as their lender mix, that the model's variables don't capture.
 
 ## Q2: Which variables drive that risk?
 
@@ -75,7 +77,7 @@ Mean absolute SHAP is how much a variable moves a loan's predicted risk, on aver
 | 9 | Credit Score and Loan Purpose | 0.030 |
 | 10 | Loan Amount % of Limit and Number of Borrowers | 0.029 |
 
-This measures how much a pair moves risk beyond what each variable does alone. All are small next to the main effects in the importance table. Loan size appears in five of the top ten pairs.
+This measures how much a pair moves risk beyond what each variable does alone. All pairs are small next to the main effects in the importance table. Loan amount % of limit appears in five of the top ten pairs.
 
 ### Odds Ratios (how each variable changes the odds of going bad, Logistic Regression)
 
@@ -94,9 +96,9 @@ This measures how much a pair moves risk beyond what each variable does alone. A
 | At-the-Limit Flag | Yes vs no | 1.43 | 1.37 to 1.50 |
 | High-Balance Flag | Yes vs no | 1.20 | 1.14 to 1.26 |
 
-Above 1 raises the odds of going bad and below 1 lowers them, with other variables held equal (1.30 = 30% higher odds). Number variables are shown per one standard deviation. Mortgage insurance overlaps with combined LTV, and the two flags with loan size, so read those together.
+Above 1 raises the odds of going bad and below 1 lowers them, with other variables held equal (1.30 = 30% higher odds). Number variables are shown per one standard deviation. Some variables overlap, so read them together: mortgage insurance % with combined LTV, and the high-balance and at-the-limit flags with loan amount % of limit.
 
-Credit score and number of borrowers drive risk the most, followed by DTI, combined LTV and rate spread. Risk rises with lower credit scores, a single borrower, higher DTI and LTV, a higher rate spread, longer terms, cash-out refinancing and loans at the conforming limit. Loan size also matters through how it combines with other variables.
+Credit score and number of borrowers drive risk the most, followed by DTI, combined LTV and rate spread. Risk rises with lower credit scores, a single borrower, higher DTI and combined LTV, a higher rate spread, longer terms, cash-out refinancing and loans at the conforming limit. Loan amount % of limit also matters through how it combines with other variables, especially loan purpose.
 
 ## Q3: Where should a lender set approval cutoffs to remove the most delinquent-loan dollars while declining the fewest good-loan dollars?
 
@@ -111,7 +113,7 @@ Credit score and number of borrowers drive risk the most, followed by DTI, combi
 | Pair of Variables | Decline if credit score is 730 or lower, or the loan is in a housing finance agency program |
 | Trio of Variables | Decline if credit score is 732 or lower and (DTI is 29% or higher, or there is one borrower) |
 
-Each method's best-scoring cutoff on the 2022 validation loans. The simple rules all center on a credit score of about 730.
+Each method's best-scoring cutoff on the 2022 validation loans. The variable rules all center on a credit score of about 730.
 
 ### Scores (% of bad-loan dollars declined minus % of good-loan dollars declined)
 
@@ -124,6 +126,6 @@ Each method's best-scoring cutoff on the 2022 validation loans. The simple rules
 | Pair of Variables | 40.9 | 41.5 | 68.5% | 27.0% | 30.6% |
 | Trio of Variables | 41.4 | 41.8 | 67.4% | 25.6% | 28.6% |
 
-0 is no better than approving everyone; 100 would mean every bad-loan dollar is declined and no good ones. LightGBM scored highest on both validation (2022) and test (2023). It beat the best simple rule by about 9 points and Logistic Regression by about 1.
+0 is no better than approving everyone; 100 would mean every bad-loan dollar is declined and no good ones. LightGBM scored highest on both validation (2022) and test (2023). It beat the best variable rule by about 9 points and Logistic Regression by about 1.
 
-A lender should set the cutoff on LightGBM's predicted risk, declining loans rated 1.085% or higher. On 2023 loans, that caught 76.7% of bad-loan dollars while turning away 25.9% of good-loan dollars. This is the point of best separation, not a profit-maximizing line. The trade-off curve data in the Q3 folder shows the other options.
+A lender should set the cutoff on LightGBM's predicted risk, declining loans rated 1.085% or higher. On 2023 loans, that caught 76.7% of bad-loan dollars while turning away 25.9% of good-loan dollars. This is the point of best separation, not a profit-maximizing line; a lender with its own cost data could choose a different point.
