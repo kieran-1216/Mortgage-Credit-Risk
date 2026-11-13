@@ -43,15 +43,15 @@ Two models are built: Logistic Regression and LightGBM.
 - **Train (2014Q1 to 2020Q1):** learns from training loans, using only variables known at application. It has no settings to tune.
 - **Validate (2022Q2 to 2022Q4):** predicts the validation loans, and its percentages are adjusted to match them (isotonic calibration).
 - **Test (2023Q1 to 2023Q4):** predicts the test loans with that adjustment and is measured on all test loans, then on each agency's alone:
-  - **Order (AUC):** do the riskiest-rated loans actually go bad most?
-  - **Level (calibration):** do its percentages match actual bad rates across ten equal-sized risk groups?
+  - **Order (AUC):** do the riskiest-rated loans actually become delinquent most often?
+  - **Level (calibration):** do its percentages match actual delinquency rates across ten equal-sized risk groups?
 
 **LightGBM**
 - **Train (2014Q1 to 2020Q1):** Optuna tries different setups within ranges fixed before modeling. Each setup learns from training loans, using only variables known at application.
 - **Validate (2022Q2 to 2022Q4):** each setup predicts the validation loans, and its percentages are adjusted to match them (isotonic calibration). The setup whose adjusted percentages come closest to what actually happened is kept, along with its adjustment.
 - **Test (2023Q1 to 2023Q4):** predicts the test loans with that adjustment and is measured on all test loans, then on each agency's alone:
-  - **Order (AUC):** do the riskiest-rated loans actually go bad most?
-  - **Level (calibration):** do its percentages match actual bad rates across ten equal-sized risk groups?
+  - **Order (AUC):** do the riskiest-rated loans actually become delinquent most often?
+  - **Level (calibration):** do its percentages match actual delinquency rates across ten equal-sized risk groups?
 
 ### Q2: Which variables drive that risk?
 Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans (2023Q1 to 2023Q4), on the log-odds scale:
@@ -62,14 +62,14 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 
 ### Q3: Which cutoff best separates delinquent from performing loans?
 - **Methods:** no cutoff (baseline); Logistic Regression risk; LightGBM risk; each variable alone; every pair of variables; every trio of variables (pairs and trios in every and/or combination).
-- **Riskier end:** for the variable, pair and trio rules, each variable's riskier end is learned from training loans. For numbers, it's the end where loans went bad more often (for example, higher DTI). For categories, they're ordered from most often bad to least.
-- **Missing values:** loans missing a value are kept together and placed in that order by how often they went bad in training.
-- **Score:** % of bad-loan dollars declined minus % of good-loan dollars declined, using each loan's original amount.
+- **Riskier end:** for the variable, pair and trio rules, each variable's riskier end is learned from training loans. For numbers, it's the end where loans became delinquent more often (for example, higher DTI). For categories, they're ordered from most to least often delinquent.
+- **Missing values:** loans missing a value are kept together and placed in that order by how often they became delinquent in training.
+- **Score:** % of delinquent balance declined minus % of performing balance declined, using each loan's original amount.
 - **Process (for each method):**
   - **Cutoffs:** set from training values. For a single variable or a model's risk, every distinct value (for a category, each boundary in riskiest-first order). For pairs and trios, each variable at 1% steps, in every combination.
   - **Scoring the cutoffs:** every cutoff is scored on validation loans, and the highest score is kept; ties go to the cutoff declining fewer loan dollars.
-  - **Testing the cutoff:** only the chosen cutoff is applied to test loans, as a fixed rule (for example, decline if risk is above 4%). Results include the score and the bad and good loans declined and approved, in counts and dollars, on all test loans and then on each agency's alone. No winner is picked here; test results are just reported.
-- **Trade-off curve:** on test loans, how much bad-loan money is caught at each amount of good-loan money turned away; a line for each model and single-variable method, plus a dot at each method's chosen cutoff, all on one chart.
+  - **Testing the cutoff:** only the chosen cutoff is applied to test loans, as a fixed rule (for example, decline if risk is above 4%). Results include the score and the delinquent and performing loans declined and approved, in counts and dollars, on all test loans and then on each agency's alone. No winner is picked here; test results are just reported.
+- **Trade-off curve:** on test loans, how much delinquent balance is caught at each amount of performing balance turned away; a line for each model and single-variable method, plus a dot at each method's chosen cutoff, all on one chart.
 - **Winning method:** the method with the highest validation score; ties go to the method declining fewer loan dollars, and if still tied, the method using fewer variables wins.
 
 ## Tools
@@ -84,7 +84,7 @@ Uses the Q1 models. Nothing new is learned or chosen. SHAP values on test loans 
 
 ## Limitations
 - **Approved loans only.** The data holds only loans that were approved and sold to the agencies, so the models never see declined applications.
-- **No cost or profit data.** Q3's cutoff is the point of best separation between bad-loan and good-loan dollars, not a profit-maximizing line. A real lender would set its line from its own costs; the trade-off curve shows the alternatives.
+- **No cost or profit data.** Q3's cutoff is the point of best separation between delinquent and performing balances, not a profit-maximizing line. A real lender would set its line from its own costs; the trade-off curve shows the alternatives.
 - **Older training loans.** Loans from 2014 to 2020 behaved differently from 2022 and 2023 loans. Percentages are re-adjusted on 2022 loans, but some groups, mainly refinances and larger loans near the conforming limit, are still predicted less accurately in 2023.
 - **One model for both agencies.** Freddie Mac loans ran riskier than predicted, and Fannie Mae loans safer. Agency is not a variable because gaps in Fannie Mae's training-era data would teach the model the wrong direction.
 - **Results review.** Models were refined after a review of first test results (calibration and loan-size handling); the 2023 test set was rescored once.
