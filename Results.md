@@ -34,6 +34,9 @@ AUC measures how well a model ranks loans by risk, from 0.5 (a coin flip) to 1.0
 
 Loans are sorted by predicted risk into ten equal groups. Each group's predicted rate should match its actual rate, and they track closely in every group.
 
+<details>
+<summary>Calibration by agency (Freddie Mac and Fannie Mae)</summary>
+
 **Freddie Mac**
 
 | Risk Group (1 = Lowest) | Logistic Regression: Predicted | Logistic Regression: Actual | LightGBM: Predicted | LightGBM: Actual |
@@ -64,6 +67,8 @@ Loans are sorted by predicted risk into ten equal groups. Each group's predicted
 | 9 | 1.99% | 1.79% | 2.00% | 1.83% |
 | 10 | 3.94% | 3.61% | 4.11% | 3.76% |
 
+</details>
+
 By agency, Fannie Mae loans became delinquent less often than predicted in every group, and Freddie Mac loans more often in the riskier half.
 
 Each loan gets its own probability, and both models estimate it well. With LightGBM, the stronger model, probabilities average 0.04% in the safest tenth of loans and 4.39% in the riskiest. It ranks loans well (AUC 0.82) and matches actual rates overall (1.03% predicted vs 1.04% actual). Accuracy is weakest by agency. Freddie Mac loans became delinquent about 10% more often than predicted, and Fannie Mae loans about 10% less often. This likely reflects differences between the agencies, such as their lender mix, that the model's variables don't capture.
@@ -92,82 +97,194 @@ Each loan gets its own probability, and both models estimate it well. With Light
 | At-the-Limit Flag | 0.005 (16) | 0.012 (15) |
 | Number of Units | 0.002 (17) | 0.002 (17) |
 
-Mean absolute SHAP (SHapley Additive exPlanations) is how much a variable moves a loan's predicted risk, on average (higher means more influence). Both models agree on the top three variables.
+Mean absolute SHAP (SHapley Additive exPlanations) is how much a variable moves a loan's predicted risk, on average. Both models agree on the top three variables.
 
 ### Shape (how each variable's effect changes across its values)
 
-**Number variables**
+**Numeric variables**
+
+<details>
+<summary>Credit Score</summary>
 
 | Credit Score | 620 | 660 | 700 | 740 | 780 | 820 | Missing |
 |---|---|---|---|---|---|---|---|
 | LightGBM | 2.31 | 1.63 | 0.79 | 0.00 | -0.48 | -0.91 | 0.85 |
 | Logistic Regression | 2.34 | 1.61 | 0.88 | 0.15 | -0.58 | -1.31 | -0.14 |
 
+</details>
+
+<details>
+<summary>Combined LTV</summary>
+
 | Combined LTV | 60 | 70 | 80 | 90 | 95 | 97 | 100 | 105 |
 |---|---|---|---|---|---|---|---|---|
 | LightGBM | -0.20 | -0.11 | -0.01 | 0.17 | 0.41 | 0.55 | 0.69 | 0.78 |
 | Logistic Regression | -0.15 | -0.05 | 0.05 | 0.14 | 0.19 | 0.21 | 0.24 | 0.29 |
+
+</details>
+
+<details>
+<summary>DTI</summary>
 
 | DTI | 10 | 20 | 30 | 40 | 45 | 46 | 50 |
 |---|---|---|---|---|---|---|---|
 | LightGBM | -0.50 | -0.47 | -0.21 | 0.20 | 0.44 | 0.35 | 0.53 |
 | Logistic Regression | -0.68 | -0.40 | -0.13 | 0.15 | 0.29 | 0.32 | 0.43 |
 
+</details>
+
+<details>
+<summary>Rate Spread</summary>
+
 | Rate Spread | -1.00 | -0.50 | -0.25 | 0.00 | 0.25 | 0.50 | 1.00 |
 |---|---|---|---|---|---|---|---|
 | LightGBM | -0.07 | -0.25 | -0.21 | -0.05 | 0.19 | 0.32 | 0.50 |
 | Logistic Regression | -0.51 | -0.27 | -0.15 | -0.03 | 0.09 | 0.21 | 0.44 |
+
+</details>
+
+<details>
+<summary>Mortgage Insurance %</summary>
 
 | Mortgage Insurance % | 0 | 12 | 25 | 30 | 35 |
 |---|---|---|---|---|---|
 | LightGBM | -0.05 | 0.07 | 0.10 | 0.13 | 0.23 |
 | Logistic Regression | -0.11 | 0.07 | 0.25 | 0.32 | 0.40 |
 
+</details>
+
+<details>
+<summary>Loan Amount % of Limit</summary>
+
 | Loan Amount % of Limit | Under 25 | 25 to 50 | 50 to 75 | 75 to 100 | Over 100 |
 |---|---|---|---|---|---|
 | LightGBM | 0.33 | 0.01 | -0.08 | -0.02 | -0.20 |
 | Logistic Regression | 0.08 | 0.04 | -0.02 | -0.08 | -0.16 |
+
+</details>
+
+<details>
+<summary>Loan Term</summary>
 
 | Loan Term (Months) | 120 | 180 | 240 | 300 | 360 |
 |---|---|---|---|---|---|
 | LightGBM | -0.51 | -0.36 | -0.21 | 0.00 | 0.09 |
 | Logistic Regression | -0.45 | -0.32 | -0.18 | -0.05 | 0.08 |
 
-**Category variables**
+</details>
 
-| Variable | Value | LightGBM | Logistic Regression |
-|---|---|---|---|
-| Loan Purpose | Purchase | -0.14 | -0.05 |
-| Loan Purpose | Cash-out refinance | 0.29 | 0.18 |
-| Loan Purpose | No-cash-out refinance | 0.03 | -0.05 |
-| Number of Borrowers | 1 | 0.49 | 0.45 |
-| Number of Borrowers | 2 or more | -0.53 | -0.48 |
-| Occupancy | Primary home | 0.03 | 0.03 |
-| Occupancy | Second home | -0.06 | -0.10 |
-| Occupancy | Investment property | -0.29 | -0.29 |
-| First-Time Homebuyer | Yes | 0.05 | 0.07 |
-| First-Time Homebuyer | No | 0.00 | -0.02 |
-| Channel | Retail | 0.00 | -0.02 |
-| Channel | Broker | 0.11 | 0.11 |
-| Channel | Correspondent | -0.03 | 0.01 |
-| Property Type | Single-family | 0.01 | 0.01 |
-| Property Type | Planned development | 0.01 | 0.04 |
-| Property Type | Condo | -0.13 | -0.16 |
-| Property Type | Co-op | -0.15 | -0.50 |
-| Property Type | Manufactured home | 0.25 | 0.20 |
-| Number of Units | 1 | 0.00 | 0.00 |
-| Number of Units | 2 | -0.07 | -0.07 |
-| Number of Units | 3 | -0.01 | -0.04 |
-| Number of Units | 4 | 0.00 | 0.13 |
-| Special Program | None | 0.00 | 0.00 |
-| Special Program | Housing finance agency | 0.00 | 0.28 |
-| Special Program | Affordable lending | 0.00 | 0.02 |
-| High-Balance Flag | Yes | 0.16 | 0.18 |
-| High-Balance Flag | No | -0.01 | -0.01 |
-| At-the-Limit Flag | Yes | 0.15 | 0.35 |
-| At-the-Limit Flag | No | 0.00 | -0.01 |
+**Categorical variables**
 
-Each number is the mean SHAP value for loans at that value: positive pushes predicted risk up, negative pushes it down, and 0 is about average. Loan amount % of limit is shown in ranges because it has thousands of distinct values; groups of 1 to 10 loans are not shown. Logistic Regression's effects change in a straight line by design, while LightGBM's can jump or change direction: risk climbs sharply above about 93% combined LTV, dips at a DTI of 46%, and turns back up for very small loans and for rate spreads far below the market. LightGBM also rates loans with no credit score as risky, while Logistic Regression treats them as close to average because it fills a missing score with a typical value.
+<details>
+<summary>Loan Purpose</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Purchase | -0.14 | -0.05 |
+| Cash-out refinance | 0.29 | 0.18 |
+| No-cash-out refinance | 0.03 | -0.05 |
+
+</details>
+
+<details>
+<summary>Number of Borrowers</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| 1 | 0.49 | 0.45 |
+| 2 or more | -0.53 | -0.48 |
+
+</details>
+
+<details>
+<summary>Occupancy</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Primary home | 0.03 | 0.03 |
+| Second home | -0.06 | -0.10 |
+| Investment property | -0.29 | -0.29 |
+
+</details>
+
+<details>
+<summary>First-Time Homebuyer</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Yes | 0.05 | 0.07 |
+| No | 0.00 | -0.02 |
+
+</details>
+
+<details>
+<summary>Channel</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Retail | 0.00 | -0.02 |
+| Broker | 0.11 | 0.11 |
+| Correspondent | -0.03 | 0.01 |
+
+</details>
+
+<details>
+<summary>Property Type</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Single-family | 0.01 | 0.01 |
+| Planned development | 0.01 | 0.04 |
+| Condo | -0.13 | -0.16 |
+| Co-op | -0.15 | -0.50 |
+| Manufactured home | 0.25 | 0.20 |
+
+</details>
+
+<details>
+<summary>Number of Units</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| 1 | 0.00 | 0.00 |
+| 2 | -0.07 | -0.07 |
+| 3 | -0.01 | -0.04 |
+| 4 | 0.00 | 0.13 |
+
+</details>
+
+<details>
+<summary>Special Program</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| None | 0.00 | 0.00 |
+| Housing finance agency | 0.00 | 0.28 |
+| Affordable lending | 0.00 | 0.02 |
+
+</details>
+
+<details>
+<summary>High-Balance Flag</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Yes | 0.16 | 0.18 |
+| No | -0.01 | -0.01 |
+
+</details>
+
+<details>
+<summary>At-the-Limit Flag</summary>
+
+| Value | LightGBM | Logistic Regression |
+|---|---|---|
+| Yes | 0.15 | 0.35 |
+| No | 0.00 | -0.01 |
+
+</details>
+
+Positive values push predicted risk up and negative values push it down. Credit score has by far the largest effect, from about +2.3 at 620 to -0.9 or lower at 820, followed by number of borrowers, DTI and combined LTV. Logistic Regression's effects change in a straight line by design, while LightGBM captures nonlinear patterns: risk climbs sharply above about 93% combined LTV and rises again for very small loans and for rate spreads far below the market. LightGBM also rates loans with no credit score as risky, while Logistic Regression rates them near average.
 
 ### Compounding (variables whose effects depend on each other; LightGBM only)
 
