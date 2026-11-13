@@ -38,7 +38,7 @@ Each loan gets its own probability from the models, using only information known
 
 ## Q2: Which variables drive that risk?
 
-### Importance (how much each variable moves predicted risk)
+### Importance (each variable's impact on predicted risk)
 
 | Variable | LightGBM: Mean Absolute SHAP (Rank) | Logistic Regression: Mean Absolute SHAP (Rank) |
 |---|---|---|
@@ -60,26 +60,26 @@ Each loan gets its own probability from the models, using only information known
 | At-the-Limit Flag | 0.005 (16) | 0.012 (15) |
 | Number of Units | 0.002 (17) | 0.002 (17) |
 
-Mean absolute SHAP is how much a variable moves a loan's predicted risk, on average; higher means more influence. Both models agree on the top three. Logistic Regression leans more on mortgage insurance %.
+Mean absolute SHAP (SHapley Additive exPlanations) is how much a variable moves a loan's predicted risk, on average (higher means more influence). Both models agree on the top three variables.
 
-### Top Interactions (variables whose effects depend on each other, LightGBM)
+### Top Interactions (variables whose effects depend on each other; LightGBM only)
 
 | Rank | Variable Pair | Mean Absolute SHAP Interaction |
 |---|---|---|
-| 1 | Loan Amount % of Limit and Loan Purpose | 0.062 |
-| 2 | Credit Score and Loan Amount % of Limit | 0.050 |
-| 3 | DTI and Number of Borrowers | 0.046 |
-| 4 | Credit Score and Number of Borrowers | 0.045 |
-| 5 | Rate Spread and Loan Amount % of Limit | 0.039 |
-| 6 | Rate Spread and Loan Purpose | 0.037 |
-| 7 | Loan Amount % of Limit and Occupancy | 0.033 |
-| 8 | DTI and Rate Spread | 0.032 |
-| 9 | Credit Score and Loan Purpose | 0.030 |
-| 10 | Loan Amount % of Limit and Number of Borrowers | 0.029 |
+| 1 | Loan Amount % of Limit × Loan Purpose | 0.062 |
+| 2 | Credit Score × Loan Amount % of Limit | 0.050 |
+| 3 | DTI × Number of Borrowers | 0.046 |
+| 4 | Credit Score × Number of Borrowers | 0.045 |
+| 5 | Rate Spread × Loan Amount % of Limit | 0.039 |
+| 6 | Rate Spread × Loan Purpose | 0.037 |
+| 7 | Loan Amount % of Limit × Occupancy | 0.033 |
+| 8 | DTI × Rate Spread | 0.032 |
+| 9 | Credit Score × Loan Purpose | 0.030 |
+| 10 | Loan Amount % of Limit × Number of Borrowers | 0.029 |
 
-This measures how much a pair moves risk beyond what each variable does alone. All pairs are small next to the main effects in the importance table. Loan amount % of limit appears in five of the top ten pairs.
+Mean absolute SHAP interaction is how much a pair of variables moves a loan's predicted risk beyond what each does alone, on average. All pairs are small next to the main effects in the importance table. Loan amount % of limit appears in 5 of the top 10 pairs.
 
-### Odds Ratios (how each variable changes the odds of going bad, Logistic Regression)
+### Odds Ratios (how each variable changes the odds of going bad; Logistic Regression only)
 
 | Variable | Change | Odds Ratio | 95% Range |
 |---|---|---|---|
